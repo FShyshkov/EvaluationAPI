@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EvaluationAPI.DAL.Migrations
+namespace EvaluationAPI.DAL.Migrations.Evaluation
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -69,6 +69,37 @@ namespace EvaluationAPI.DAL.Migrations
                         principalTable: "Tests",
                         principalColumn: "TestId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "TestsDB",
+                table: "Tests",
+                columns: new[] { "TestId", "TestName" },
+                values: new object[] { 1, "Test1" });
+
+            migrationBuilder.InsertData(
+                schema: "TestsDB",
+                table: "Tests",
+                columns: new[] { "TestId", "TestName" },
+                values: new object[] { 2, "Test2" });
+
+            migrationBuilder.InsertData(
+                schema: "TestsDB",
+                table: "Tests",
+                columns: new[] { "TestId", "TestName" },
+                values: new object[] { 3, "Test3" });
+
+            migrationBuilder.InsertData(
+                schema: "TestsDB",
+                table: "Questions",
+                columns: new[] { "QuestionId", "Answer", "Name", "QuestionText", "TestId" },
+                values: new object[,]
+                {
+                    { 1, "010", "Question1?", "PossibleAnswer1,CorrectAnswer,PossibleAnswer3", 1 },
+                    { 2, "0010", "Question2?", "PossibleAnswer1 asd,PossibleAnswer 2, CorrectAnswer, Answer4", 1 },
+                    { 3, "0100", "Question3?", "PossibleAnswer21 asd,Correct Answer,Possib4le  234252Answer3, Answer4", 1 },
+                    { 4, "010", "Question4?", "PossibleAnswe4r1 asd,Correct answer,Possible252Answer3", 2 },
+                    { 5, "10100", "Question5?", "CorrectAnswer1,Possinswer 2,CorrectAnswer2, PossibleAnswer4, PossibleAnswer5", 2 }
                 });
 
             migrationBuilder.CreateIndex(

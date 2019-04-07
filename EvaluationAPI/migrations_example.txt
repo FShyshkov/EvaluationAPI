@@ -1,0 +1,6 @@
+RUN IN EvaluationAPI/EvaluationAPI
+
+dotnet ef migrations add Initial --context EvIdentityContext --project ..\EvaluationAPI.DAL
+dotnet ef migrations add Initial --context EvaluationContext --project ..\EvaluationAPI.DAL
+dotnet ef database update --context EvIdentityContext --project ..\EvaluationAPI.DAL
+dotnet ef database update --context EvaluationContext --project ..\EvaluationAPI.DAL

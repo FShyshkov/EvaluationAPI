@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EvaluationAPI.DAL.Migrations
+namespace EvaluationAPI.DAL.Migrations.Evaluation
 {
     [DbContext(typeof(EvaluationContext))]
-    [Migration("20190327100926_initial")]
-    partial class initial
+    [Migration("20190407200558_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,48 @@ namespace EvaluationAPI.DAL.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("Questions","TestsDB");
+
+                    b.HasData(
+                        new
+                        {
+                            QuestionId = 1,
+                            Answer = "010",
+                            Name = "Question1?",
+                            QuestionText = "PossibleAnswer1,CorrectAnswer,PossibleAnswer3",
+                            TestId = 1
+                        },
+                        new
+                        {
+                            QuestionId = 2,
+                            Answer = "0010",
+                            Name = "Question2?",
+                            QuestionText = "PossibleAnswer1 asd,PossibleAnswer 2, CorrectAnswer, Answer4",
+                            TestId = 1
+                        },
+                        new
+                        {
+                            QuestionId = 3,
+                            Answer = "0100",
+                            Name = "Question3?",
+                            QuestionText = "PossibleAnswer21 asd,Correct Answer,Possib4le  234252Answer3, Answer4",
+                            TestId = 1
+                        },
+                        new
+                        {
+                            QuestionId = 4,
+                            Answer = "010",
+                            Name = "Question4?",
+                            QuestionText = "PossibleAnswe4r1 asd,Correct answer,Possible252Answer3",
+                            TestId = 2
+                        },
+                        new
+                        {
+                            QuestionId = 5,
+                            Answer = "10100",
+                            Name = "Question5?",
+                            QuestionText = "CorrectAnswer1,Possinswer 2,CorrectAnswer2, PossibleAnswer4, PossibleAnswer5",
+                            TestId = 2
+                        });
                 });
 
             modelBuilder.Entity("EvaluationAPI.DAL.Entities.Result", b =>
@@ -82,6 +124,23 @@ namespace EvaluationAPI.DAL.Migrations
                     b.HasKey("TestId");
 
                     b.ToTable("Tests","TestsDB");
+
+                    b.HasData(
+                        new
+                        {
+                            TestId = 1,
+                            TestName = "Test1"
+                        },
+                        new
+                        {
+                            TestId = 2,
+                            TestName = "Test2"
+                        },
+                        new
+                        {
+                            TestId = 3,
+                            TestName = "Test3"
+                        });
                 });
 
             modelBuilder.Entity("EvaluationAPI.DAL.Entities.Question", b =>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EvaluationAPI.DAL.Migrations.EvIdentity
+namespace EvaluationAPI.DAL.Migrations
 {
     [DbContext(typeof(EvIdentityContext))]
     partial class EvIdentityContextModelSnapshot : ModelSnapshot
@@ -19,7 +19,7 @@ namespace EvaluationAPI.DAL.Migrations.EvIdentity
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("EvaluationAPI.DAL.Identity.Entities.EvaluationUser", b =>
+            modelBuilder.Entity("EvaluationAPI.DAL.Identity.IdentityEntity.EvaluationUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -194,7 +194,7 @@ namespace EvaluationAPI.DAL.Migrations.EvIdentity
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("EvaluationAPI.DAL.Identity.Entities.EvaluationUser")
+                    b.HasOne("EvaluationAPI.DAL.Identity.IdentityEntity.EvaluationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -202,7 +202,7 @@ namespace EvaluationAPI.DAL.Migrations.EvIdentity
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("EvaluationAPI.DAL.Identity.Entities.EvaluationUser")
+                    b.HasOne("EvaluationAPI.DAL.Identity.IdentityEntity.EvaluationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -215,7 +215,7 @@ namespace EvaluationAPI.DAL.Migrations.EvIdentity
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("EvaluationAPI.DAL.Identity.Entities.EvaluationUser")
+                    b.HasOne("EvaluationAPI.DAL.Identity.IdentityEntity.EvaluationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -223,7 +223,7 @@ namespace EvaluationAPI.DAL.Migrations.EvIdentity
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("EvaluationAPI.DAL.Identity.Entities.EvaluationUser")
+                    b.HasOne("EvaluationAPI.DAL.Identity.IdentityEntity.EvaluationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
