@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EvaluationAPI.BLL\EvaluationAPI.BLL.csproj" />
     <ProjectReference Include="..\EvaluationAPI.DAL\EvaluationAPI.DAL.csproj" />
   </ItemGroup>
 

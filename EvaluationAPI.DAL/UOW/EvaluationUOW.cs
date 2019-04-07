@@ -21,7 +21,7 @@ namespace EvaluationAPI.DAL.UOW
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public virtual IRepository<Test> Tests {
+        public virtual ITestRepository Tests {
             get
             {
 
@@ -33,7 +33,7 @@ namespace EvaluationAPI.DAL.UOW
             }
         }
 
-        public virtual IRepository<Question> Questions
+        public virtual IQuestionRepository Questions
         {
             get
             {
@@ -46,7 +46,7 @@ namespace EvaluationAPI.DAL.UOW
             }
         }
 
-        public virtual IRepository<Result> Results
+        public virtual IResultRepository Results
         {
             get
             {

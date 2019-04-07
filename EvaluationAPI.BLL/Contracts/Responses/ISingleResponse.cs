@@ -4,7 +4,8 @@ using System.Text;
 
 namespace EvaluationAPI.BLL.Contracts
 {
-    interface ITestEditService
+    public interface ISingleResponse<TModel> : IResponse
     {
+        TModel Model { get; set; }
     }
 }

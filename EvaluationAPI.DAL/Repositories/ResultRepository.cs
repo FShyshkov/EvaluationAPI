@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EvaluationAPI.DAL.Repositories
 {
-    class ResultRepository : IRepository<Result>
+    class ResultRepository : IResultRepository
     {
         readonly EvaluationContext _context;
 
@@ -65,7 +65,7 @@ namespace EvaluationAPI.DAL.Repositories
             return entity;
         }
 
-        public async virtual Task<Result> Update(Result entity)
+        public virtual Result Update(Result entity)
         {
             _context.Results.Update(entity);
             return entity;

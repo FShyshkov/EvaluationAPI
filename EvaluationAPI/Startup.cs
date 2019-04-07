@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using EvaluationAPI.DAL.Identity.IdentityContext;
+using EvaluationAPI.DAL.Identity.Entities;
 using EvaluationAPI.DAL.Context;
 
 namespace EvaluationAPI
@@ -36,6 +37,16 @@ namespace EvaluationAPI
             services.AddDbContext<EvaluationContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DataDatabase"), 
                 b => b.MigrationsAssembly("EvaluationAPI.DAL")));
+
+            var identityBuilder = services.AddIdentityCore<EvaluationUser>(o =>
+            {
+                // configure identity options
+                o.Password.RequireDigit = false;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 6;
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

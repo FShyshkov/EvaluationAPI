@@ -21,6 +21,18 @@ namespace EvaluationAPI.BLL.Common
             };
         }
 
+        public Question MapDTOQuestion(QuestionDTO question)
+        {
+            return new Question()
+            {
+                QuestionId = question.QuestionId,
+                Name = question.Name,
+                QuestionText = question.QuestionText,
+                Answer = question.Answer,
+                TestId = question.TestId
+            };
+        }
+
         public ResultDTO MapResult(Result result)
         {
             return new ResultDTO()
@@ -29,6 +41,17 @@ namespace EvaluationAPI.BLL.Common
                UserName = result.UserName,
                TestId = result.TestId,
                TestResult = result.TestResult
+            };
+        }
+
+        public Result MapDTOResult(ResultDTO result)
+        {
+            return new Result()
+            {
+                ResultId = result.ResultId,
+                UserName = result.UserName,
+                TestId = result.TestId,
+                TestResult = result.TestResult
             };
         }
 
@@ -51,6 +74,30 @@ namespace EvaluationAPI.BLL.Common
                 foreach (var r in test.Results)
                 {
                     tempTest.DTOResults.Add(MapResult(r));
+                }
+            }
+            return tempTest;
+        }
+
+        public Test MapDTOTest(TestDTO test)
+        {
+            Test tempTest = new Test()
+            {
+                TestId = test.TestId,
+                TestName = test.TestName
+            };
+            if (test.DTOQuestions != null)
+            {
+                foreach (var q in test.DTOQuestions)
+                {
+                    tempTest.Questions.Add(MapDTOQuestion(q));
+                }
+            }
+            if (test.DTOResults != null)
+            {
+                foreach (var r in test.DTOResults)
+                {
+                    tempTest.Results.Add(MapDTOResult(r));
                 }
             }
             return tempTest;

@@ -11,5 +11,8 @@ namespace EvaluationAPI.BLL.Contracts
         QuestionDTO MapQuestion(Question question);
         ResultDTO MapResult(Result result);
         TestDTO MapTest(Test test);
+        Question MapDTOQuestion(QuestionDTO question);
+        Result MapDTOResult(ResultDTO result);
+        Test MapDTOTest(TestDTO test);
     }
 }

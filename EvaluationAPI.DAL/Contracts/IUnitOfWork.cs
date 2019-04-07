@@ -7,9 +7,9 @@ namespace EvaluationAPI.DAL.Contracts
 {
     public interface IUnitOfWork:IDisposable
     {
-        IRepository<Test> Tests { get; }
-        IRepository<Question> Questions { get; }
-        IRepository<Result> Results { get; }
+        ITestRepository Tests { get; }
+        IQuestionRepository Questions { get; }
+        IResultRepository Results { get; }
 
         Task<int> SaveAsync();
     }
