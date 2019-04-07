@@ -37,6 +37,7 @@ namespace EvaluationAPI.BLL.Common
         {
             return new ResultDTO()
             {
+               ResultId = result.ResultId,
                UserName = result.UserName,
                TestId = result.TestId,
                TestResult = result.TestResult
@@ -47,6 +48,7 @@ namespace EvaluationAPI.BLL.Common
         {
             return new Result()
             {
+                ResultId = result.ResultId,
                 UserName = result.UserName,
                 TestId = result.TestId,
                 TestResult = result.TestResult

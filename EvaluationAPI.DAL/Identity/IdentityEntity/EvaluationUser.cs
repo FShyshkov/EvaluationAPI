@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace EvaluationAPI.DAL.Identity.Entities
+namespace EvaluationAPI.DAL.Identity.IdentityEntity
 {
     public class EvaluationUser:IdentityUser
     {

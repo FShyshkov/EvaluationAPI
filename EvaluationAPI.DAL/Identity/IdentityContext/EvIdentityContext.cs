@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using EvaluationAPI.DAL.Identity.Entities;
+using EvaluationAPI.DAL.Identity.IdentityEntity;
 
 namespace EvaluationAPI.DAL.Identity.IdentityContext
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using EvaluationAPI.BLL.Contracts;
-using EvaluationAPI.DAL.Identity.Entities;
+using EvaluationAPI.DAL.Identity.IdentityEntity;
 using EvaluationAPI.DAL.Contracts;
 
 namespace EvaluationAPI.BLL.Services
