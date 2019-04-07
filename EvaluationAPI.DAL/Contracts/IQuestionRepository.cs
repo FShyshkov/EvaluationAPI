@@ -9,7 +9,7 @@ namespace EvaluationAPI.DAL.Contracts
 {
     public interface IQuestionRepository
     {
-        IEnumerable<Question> Get(Expression<Func<Question, bool>> filter = null,
+        Task<IEnumerable<Question>> Get(Expression<Func<Question, bool>> filter = null,
             Func<IQueryable<Question>, IOrderedQueryable<Question>> orderBy = null,
             string includeProperties = "");
         Task<Question> Find(int id);

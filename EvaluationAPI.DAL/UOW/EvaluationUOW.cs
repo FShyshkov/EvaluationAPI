@@ -4,6 +4,7 @@ using EvaluationAPI.DAL.Contracts;
 using EvaluationAPI.DAL.Context;
 using EvaluationAPI.DAL.Repositories;
 using EvaluationAPI.DAL.Entities;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EvaluationAPI.DAL.UOW
 {
@@ -19,6 +20,11 @@ namespace EvaluationAPI.DAL.UOW
         public EvaluationUOW(EvaluationContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        public async virtual Task<IDbContextTransaction> StartTransaction()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
 
         public virtual ITestRepository Tests {

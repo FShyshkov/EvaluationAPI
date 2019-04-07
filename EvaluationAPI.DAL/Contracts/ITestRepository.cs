@@ -9,9 +9,10 @@ namespace EvaluationAPI.DAL.Contracts
 {
     public interface ITestRepository
     {
-        IEnumerable<Test> Get(Expression<Func<Test, bool>> filter = null,
+        Task<IEnumerable<Test>> Get(Expression<Func<Test, bool>> filter = null,
             Func<IQueryable<Test>, IOrderedQueryable<Test>> orderBy = null,
             string includeProperties = "");
+        IQueryable<Test> GetAll();
         Task<Test> Find(int id);
         Task<Test> Add(Test entity);
         Test Update(Test entity);

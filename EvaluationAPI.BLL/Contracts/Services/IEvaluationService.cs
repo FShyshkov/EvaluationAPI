@@ -8,15 +8,15 @@ using EvaluationAPI.BLL.Common;
 
 namespace EvaluationAPI.BLL.Contracts
 {
-    public interface IEvaluationService
+    public interface IEvaluationService:IDisposable
     {
         Task<IPagedResponse<TestDTO>> GetTestsSummaryAsync(int pageSize = 10, int pageNumber = 1);
 
         Task<ISingleResponse<TestDTO>> GetTestAsync(long id);
 
-        Task<IPagedResponse<ResultDTO>> GetResultsByTestAsync(long testId);
+        Task<IPagedResponse<ResultDTO>> GetResultsByTestAsync(long testId, int pageSize = 10, int pageNumber = 1);
 
-        Task<IPagedResponse<ResultDTO>> GetResultsByUserAsync(string userName);
+        Task<IPagedResponse<ResultDTO>> GetResultsByUserAsync(string userName, int pageSize = 10, int pageNumber = 1);
 
         Task<ISingleResponse<ResultDTO>> AddResultForTestAsync(long testId, string userName, ResultDTO result);
     }

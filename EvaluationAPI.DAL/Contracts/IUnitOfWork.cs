@@ -2,6 +2,7 @@
 using EvaluationAPI.DAL.Entities;
 using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EvaluationAPI.DAL.Contracts
 {
@@ -11,6 +12,7 @@ namespace EvaluationAPI.DAL.Contracts
         IQuestionRepository Questions { get; }
         IResultRepository Results { get; }
 
+        Task<IDbContextTransaction> StartTransaction();
         Task<int> SaveAsync();
     }
 }

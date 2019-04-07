@@ -33,7 +33,7 @@ namespace EvaluationAPI.DAL.Repositories
             return await _context.Results.FindAsync(id);
         }
 
-        public virtual IEnumerable<Result> Get(System.Linq.Expressions.Expression<Func<Result, bool>> filter = null, Func<System.Linq.IQueryable<Result>, System.Linq.IOrderedQueryable<Result>> orderBy = null, string includeProperties = "")
+        public async virtual Task<IEnumerable<Result>> Get(System.Linq.Expressions.Expression<Func<Result, bool>> filter = null, Func<System.Linq.IQueryable<Result>, System.Linq.IOrderedQueryable<Result>> orderBy = null, string includeProperties = "")
         {
             IQueryable<Result> query = _context.Set<Result>();
 
@@ -50,12 +50,18 @@ namespace EvaluationAPI.DAL.Repositories
 
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return await orderBy(query).ToListAsync();
             }
             else
             {
-                return query.ToList();
+                return await query.ToListAsync();
             }
+        }
+
+        public IQueryable<Result> GetAll()
+        {
+            var querry = _context.Results.AsQueryable<Result>();
+            return querry;
         }
 
         public async virtual Task<Result> Remove(int id)

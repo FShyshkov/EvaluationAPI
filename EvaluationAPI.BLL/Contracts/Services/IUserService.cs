@@ -6,7 +6,7 @@ using EvaluationAPI.DAL.Identity.Entities;
 
 namespace EvaluationAPI.BLL.Contracts
 {
-    public interface IUserService
+    public interface IUserService : IDisposable
     {
         Task AddAsync(EvaluationUser user);
 

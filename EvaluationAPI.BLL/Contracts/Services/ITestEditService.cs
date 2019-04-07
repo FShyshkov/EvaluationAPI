@@ -6,7 +6,7 @@ using EvaluationAPI.BLL.DTO;
 
 namespace EvaluationAPI.BLL.Contracts
 {
-    public interface ITestEditService
+    public interface ITestEditService:IDisposable
     {
         Task<ISingleResponse<TestDTO>> GetTestAsync(long id);
 
