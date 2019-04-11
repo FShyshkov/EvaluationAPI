@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using EvaluationAPI.DAL.Identity.IdentityEntity;
+﻿using EvaluationAPI.BLL.Requests;
+using EvaluationAPI.BLL.Responses;
+using EvaluationAPI.BLL.Contracts;
+using System;
 
 namespace EvaluationAPI.BLL.Contracts
 {
-    public interface IUserService : IDisposable
+    public interface IUserService : IUseCaseRequestHandler<RegisterUserRequest, RegisterUserResponse>, IUseCaseRequestHandler<LoginRequest, LoginResponse>, IDisposable
     {
-        Task AddAsync(EvaluationUser user);
-
-        Task<EvaluationUser> GetByIdAsync(string id);
     }
 }

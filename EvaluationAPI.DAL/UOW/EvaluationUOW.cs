@@ -5,21 +5,43 @@ using EvaluationAPI.DAL.Context;
 using EvaluationAPI.DAL.Repositories;
 using EvaluationAPI.DAL.Entities;
 using Microsoft.EntityFrameworkCore.Storage;
+using EvaluationAPI.DAL.Identity.IdentityContext;
+using EvaluationAPI.DAL.Identity.IdentityEntity;
+using EvaluationAPI.DAL.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace EvaluationAPI.DAL.UOW
 {
     class EvaluationUOW : IUnitOfWork
     {
         readonly EvaluationContext _context;
+        readonly EvIdentityContext _identContext;
+        readonly UserManager<EvaluationUser> _appUserManager;
         internal TestRepository tests;
         internal QuestionRepository questions;
         internal ResultRepository results;
-              
+        internal UserRepository users;
+
         private bool disposed = false;
 
-        public EvaluationUOW(EvaluationContext context)
+        public EvaluationUOW(EvaluationContext context, EvIdentityContext identContext, UserManager<EvaluationUser> appUserManager)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _identContext = identContext;
+            _appUserManager = appUserManager;
+        }
+
+        public IUserRepository Users
+        {
+            get
+            {
+
+                if (this.users == null)
+                {
+                    this.users = new UserRepository(_appUserManager, _identContext);
+                }
+                return users;
+            }
         }
 
         public async virtual Task<IDbContextTransaction> StartTransaction()
@@ -63,7 +85,8 @@ namespace EvaluationAPI.DAL.UOW
                 }
                 return results;
             }
-        }        
+        }
+
 
         protected virtual void Dispose(bool disposing)
         {

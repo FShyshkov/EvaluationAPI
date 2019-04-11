@@ -11,6 +11,7 @@ namespace EvaluationAPI.DAL.Contracts
         ITestRepository Tests { get; }
         IQuestionRepository Questions { get; }
         IResultRepository Results { get; }
+        IUserRepository Users { get; }
 
         Task<IDbContextTransaction> StartTransaction();
         Task<int> SaveAsync();
