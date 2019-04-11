@@ -14,8 +14,8 @@ namespace EvaluationAPI.BLL.Common
             return new QuestionDTO()
             {
                 QuestionId = question.QuestionId,
-                Name = question.Name,
-                QuestionText = question.QuestionText,
+                QuestionText = question.Name,
+                PossibleAnswers = question.QuestionText.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries),
                 Answer = question.Answer,
                 TestId = question.TestId
             };
@@ -23,11 +23,13 @@ namespace EvaluationAPI.BLL.Common
 
         public Question MapDTOQuestion(QuestionDTO question)
         {
+            
+
             return new Question()
             {
                 QuestionId = question.QuestionId,
-                Name = question.Name,
-                QuestionText = question.QuestionText,
+                Name = question.QuestionText,
+                QuestionText = String.Join('&',question.PossibleAnswers),
                 Answer = question.Answer,
                 TestId = question.TestId
             };

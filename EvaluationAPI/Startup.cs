@@ -52,6 +52,7 @@ namespace EvaluationAPI
             services.AddIdentity<EvaluationUser, IdentityRole>()
               .AddEntityFrameworkStores<EvIdentityContext>()
               .AddDefaultTokenProviders();
+              
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
