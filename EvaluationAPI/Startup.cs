@@ -48,10 +48,7 @@ namespace EvaluationAPI
         {
             services.AddBLLServices();
             services.AddDALServices(Configuration.GetConnectionString("DataDatabase"));
-
-            services.AddIdentity<EvaluationUser, IdentityRole>()
-             .AddEntityFrameworkStores<EvIdentityContext>()
-             .AddDefaultTokenProviders();
+                    
 
             var authSettings = Configuration.GetSection(nameof(AuthSettings));
             services.Configure<AuthSettings>(authSettings);
@@ -132,12 +129,7 @@ namespace EvaluationAPI
             identityBuilder.AddEntityFrameworkStores<EvIdentityContext>().AddDefaultTokenProviders();
 
 
-
-            services.AddMvc().AddFluentValidation().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-           
-            services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
-            services.AddTransient<IValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
-            
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());            
 
              services.AddSwaggerGen(c =>
             {
@@ -156,6 +148,7 @@ namespace EvaluationAPI
                     { "Bearer", new string[] { } }
                 });
             });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -172,8 +165,8 @@ namespace EvaluationAPI
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
-            CreateRoles(serviceProvider).Wait();
             app.UseSwagger();
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evaluation API V1");
@@ -183,64 +176,5 @@ namespace EvaluationAPI
                 return Task.CompletedTask;
             }); 
         }
-        private async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            //initializing custom roles   
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<EvaluationUser>>();
-            string[] roleNames = { "Admin", "User", "Moderator" };
-            IdentityResult roleResult;
-
-            foreach (var roleName in roleNames)
-            {
-                var roleExist = await RoleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
-                {
-                    //create the roles and seed them to the database: Question 1  
-                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
-
-            EvaluationUser user = await UserManager.FindByEmailAsync("admin@goomail.com");
-
-            if (user == null)
-            {
-                user = new EvaluationUser()
-                {
-                    UserName = "TestAdmin",
-                    Email = "admin@goomail.com",
-                };
-                await UserManager.CreateAsync(user, "Admin123");
-            }
-            await UserManager.AddToRoleAsync(user, "Admin");
-
-
-            EvaluationUser user1 = await UserManager.FindByEmailAsync("test@il.com");
-
-            if (user1 == null)
-            {
-                user1 = new EvaluationUser()
-                {
-                    UserName = "TestUser",
-                    Email = "test@il.com",
-                };
-                await UserManager.CreateAsync(user1, "User123");
-            }
-            await UserManager.AddToRoleAsync(user1, "User");
-
-            EvaluationUser user2 = await UserManager.FindByEmailAsync("moder@goomail.com");
-
-            if (user2 == null)
-            {
-                user2 = new EvaluationUser()
-                {
-                    UserName = "TestModer",
-                    Email = "moder@goomail.com",
-                };
-                await UserManager.CreateAsync(user2, "Moder123");
-            }
-            await UserManager.AddToRoleAsync(user2, "Moderator");
-
-        } 
     }
 }

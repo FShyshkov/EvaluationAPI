@@ -33,7 +33,10 @@ namespace EvaluationAPI.BLL.Services
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                  new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
                  identity.FindFirst(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.Rol),
+                 identity.FindFirst(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.TestA),
+                 identity.FindFirst(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.UserA),
                  identity.FindFirst(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.Id)
+
              };
 
             // Create the JWT security token and encode it.
@@ -53,21 +56,23 @@ namespace EvaluationAPI.BLL.Services
             var claims = new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
             {
                 new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.Id, id),
-                new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.Rol, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.ApiAccess)
-            });            
+                new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.Rol, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.ApiAccess),
+                //new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.TestA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.TestAccess),
+                //new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.UserA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.UserAccess)
+        });
             //extra claims
-            //foreach (var role in roles)
-            //{
-            //    if (role == "MODERATOR")
-            //    {
-            //        claims.AddClaim(new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.TestA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.TestAccess));
-            //    }
-            //    if (role == "ADMIN")
-            //    {
-            //        claims.AddClaim(new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.TestA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.TestAccess));
-            //        claims.AddClaim(new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.UserA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.UserAccess));
-            //    }
-            //}
+            foreach (var role in roles)
+            {
+                if (role.ToUpper() == "MODERATOR")
+                {
+                    claims.AddClaim(new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.TestA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.TestAccess));
+                }
+                if (role.ToUpper() == "ADMIN")
+                {
+                    claims.AddClaim(new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.TestA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.TestAccess));
+                    claims.AddClaim(new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.UserA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.UserAccess));
+                }
+            }
             return claims;
         }
 

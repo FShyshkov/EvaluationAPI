@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EvaluationAPI.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
+    [Authorize(Policy = "UserEditor")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProtectedController : ControllerBase
