@@ -52,6 +52,23 @@ namespace EvaluationAPI.DAL.Identity.IdentityContext
                     userManager.AddToRoleAsync(user, "Admin").Wait();
                 }
             }
+
+            if (userManager.FindByNameAsync("TestUser").Result == null)
+            {
+                EvaluationUser user = new EvaluationUser();
+                user.UserName = "TestUser";
+                user.Email = "add@lhost.ua";
+                user.FirstName = "Epic";
+                user.LastName = "Tester";
+
+                IdentityResult result = userManager.CreateAsync
+                (user, "User123").Result;
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRoleAsync(user, "ApiUser").Wait();
+                }
+            }
         }
 
         public static void SeedRoles(RoleManager<IdentityRole> roleManager)

@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using EvaluationAPI.DAL.Identity.IdentityContext;
 using EvaluationAPI.DAL.Identity.IdentityEntity;
-using EvaluationAPI.DAL.Context;
 using Swashbuckle.AspNetCore.Swagger;
 using EvaluationAPI.BLL;
 using EvaluationAPI.DAL;
@@ -24,16 +18,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using EvaluationAPI.BLL.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using EvaluationAPI.BLL.Contracts;
-using EvaluationAPI.BLL.Responses;
 using EvaluationAPI.Presenters;
 using FluentValidation.AspNetCore;
-using FluentValidation;
-using EvaluationAPI.BLL.Requests;
-using EvaluationAPI.Models.Validators;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using EvaluationAPI.Extensions;
 
 namespace EvaluationAPI
 {
@@ -171,6 +161,7 @@ namespace EvaluationAPI
                             var error = context.Features.Get<IExceptionHandlerFeature>();
                             if (error != null)
                             {
+                                context.Response.AddApplicationError(error.Error.Message);
                                 await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
                             }
                         });
@@ -179,12 +170,13 @@ namespace EvaluationAPI
             app.UseHttpsRedirection();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AspNetCoreApiStarter V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EvaluationAPI V1");
             });
 
             app.UseSwagger();
             app.UseAuthentication();
             app.UseMvc();
+            
             IdentityDataInitializer.SeedData(serviceProvider);
             app.Run(context => {
                 context.Response.Redirect("../swagger");
