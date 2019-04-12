@@ -57,10 +57,8 @@ namespace EvaluationAPI.BLL.Services
             {
                 new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.Id, id),
                 new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.Rol, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.ApiAccess),
-                //new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.TestA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.TestAccess),
-                //new Claim(EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaimIdentifiers.UserA, EvaluationAPI.BLL.Constants.Constants.Strings.JwtClaims.UserAccess)
         });
-            //extra claims
+            //Claims for Moderator and Admin roles
             foreach (var role in roles)
             {
                 if (role.ToUpper() == "MODERATOR")

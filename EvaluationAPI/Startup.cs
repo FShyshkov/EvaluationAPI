@@ -31,6 +31,9 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using EvaluationAPI.BLL.Requests;
 using EvaluationAPI.Models.Validators;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace EvaluationAPI
 {
@@ -48,7 +51,6 @@ namespace EvaluationAPI
         {
             services.AddBLLServices();
             services.AddDALServices(Configuration.GetConnectionString("DataDatabase"));
-                    
 
             var authSettings = Configuration.GetSection(nameof(AuthSettings));
             services.Configure<AuthSettings>(authSettings);
@@ -107,7 +109,6 @@ namespace EvaluationAPI
                 };
             });
 
-
             // api user claim policy
             services.AddAuthorization(options =>
             {
@@ -125,13 +126,17 @@ namespace EvaluationAPI
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 6;
             });
+            services.AddIdentityCore<EvaluationUser>();
             identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
-            identityBuilder.AddEntityFrameworkStores<EvIdentityContext>().AddDefaultTokenProviders();
+            identityBuilder.AddEntityFrameworkStores<EvIdentityContext>().AddDefaultTokenProviders().AddRoleManager<RoleManager<IdentityRole>>();
+           
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
+            services.AddApiVersioning();
+            services.AddTransient<LoginPresenter>();
+            services.AddTransient<RegisterUserPresenter>();
 
-            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());            
-
-             services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "AspNetCoreApiStarter", Version = "v1" });
                 // Swagger 2.+ support
@@ -154,27 +159,37 @@ namespace EvaluationAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseExceptionHandler(
+                builder =>
+                {
+                    builder.Run(
+                        async context =>
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+                            var error = context.Features.Get<IExceptionHandlerFeature>();
+                            if (error != null)
+                            {
+                                await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
+                            }
+                        });
+                });
 
             app.UseHttpsRedirection();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AspNetCoreApiStarter V1");
+            });
+
+            app.UseSwagger();
             app.UseAuthentication();
             app.UseMvc();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evaluation API V1");
-            });
+            IdentityDataInitializer.SeedData(serviceProvider);
             app.Run(context => {
                 context.Response.Redirect("../swagger");
                 return Task.CompletedTask;
-            }); 
+            });
         }
     }
 }

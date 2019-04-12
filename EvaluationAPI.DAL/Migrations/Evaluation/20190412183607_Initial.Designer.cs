@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EvaluationAPI.DAL.Migrations.Evaluation
 {
     [DbContext(typeof(EvaluationContext))]
-    [Migration("20190407200558_Initial")]
+    [Migration("20190412183607_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                             QuestionId = 1,
                             Answer = "010",
                             Name = "Question1?",
-                            QuestionText = "PossibleAnswer1,CorrectAnswer,PossibleAnswer3",
+                            QuestionText = "PossibleAnswer1&CorrectAnswer&PossibleAnswer3",
                             TestId = 1
                         },
                         new
@@ -60,7 +60,7 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                             QuestionId = 2,
                             Answer = "0010",
                             Name = "Question2?",
-                            QuestionText = "PossibleAnswer1 asd,PossibleAnswer 2, CorrectAnswer, Answer4",
+                            QuestionText = "PossibleAnswer1 asd&PossibleAnswer 2& CorrectAnswer& Answer4",
                             TestId = 1
                         },
                         new
@@ -68,7 +68,7 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                             QuestionId = 3,
                             Answer = "0100",
                             Name = "Question3?",
-                            QuestionText = "PossibleAnswer21 asd,Correct Answer,Possib4le  234252Answer3, Answer4",
+                            QuestionText = "PossibleAnswer21 asd&Correct Answer&Possib4le  234252Answer3& Answer4",
                             TestId = 1
                         },
                         new
@@ -76,7 +76,7 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                             QuestionId = 4,
                             Answer = "010",
                             Name = "Question4?",
-                            QuestionText = "PossibleAnswe4r1 asd,Correct answer,Possible252Answer3",
+                            QuestionText = "PossibleAnswe4r1 asd&Correct answer&Possible252Answer3",
                             TestId = 2
                         },
                         new
@@ -84,7 +84,7 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                             QuestionId = 5,
                             Answer = "10100",
                             Name = "Question5?",
-                            QuestionText = "CorrectAnswer1,Possinswer 2,CorrectAnswer2, PossibleAnswer4, PossibleAnswer5",
+                            QuestionText = "CorrectAnswer1&Possinswer 2&CorrectAnswer2& PossibleAnswer4& PossibleAnswer5",
                             TestId = 2
                         });
                 });

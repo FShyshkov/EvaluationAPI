@@ -95,11 +95,11 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                 columns: new[] { "QuestionId", "Answer", "Name", "QuestionText", "TestId" },
                 values: new object[,]
                 {
-                    { 1, "010", "Question1?", "PossibleAnswer1,CorrectAnswer,PossibleAnswer3", 1 },
-                    { 2, "0010", "Question2?", "PossibleAnswer1 asd,PossibleAnswer 2, CorrectAnswer, Answer4", 1 },
-                    { 3, "0100", "Question3?", "PossibleAnswer21 asd,Correct Answer,Possib4le  234252Answer3, Answer4", 1 },
-                    { 4, "010", "Question4?", "PossibleAnswe4r1 asd,Correct answer,Possible252Answer3", 2 },
-                    { 5, "10100", "Question5?", "CorrectAnswer1,Possinswer 2,CorrectAnswer2, PossibleAnswer4, PossibleAnswer5", 2 }
+                    { 1, "010", "Question1?", "PossibleAnswer1&CorrectAnswer&PossibleAnswer3", 1 },
+                    { 2, "0010", "Question2?", "PossibleAnswer1 asd&PossibleAnswer 2& CorrectAnswer& Answer4", 1 },
+                    { 3, "0100", "Question3?", "PossibleAnswer21 asd&Correct Answer&Possib4le  234252Answer3& Answer4", 1 },
+                    { 4, "010", "Question4?", "PossibleAnswe4r1 asd&Correct answer&Possible252Answer3", 2 },
+                    { 5, "10100", "Question5?", "CorrectAnswer1&Possinswer 2&CorrectAnswer2& PossibleAnswer4& PossibleAnswer5", 2 }
                 });
 
             migrationBuilder.CreateIndex(

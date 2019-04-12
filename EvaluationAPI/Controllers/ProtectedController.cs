@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace EvaluationAPI.Controllers
-{
+{    
     [Authorize(Policy = "UserEditor")]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ProtectedController : ControllerBase
     {

@@ -32,7 +32,7 @@ namespace EvaluationAPI.DAL.Identity
         {
             var appUser = new EvaluationUser { Email = email, UserName = userName, FirstName = firstName, LastName = lastName };
             var identityResult = await _userManager.CreateAsync(appUser, password);
-            await _userManager.AddToRoleAsync(appUser, "USER");
+            await _userManager.AddToRoleAsync(appUser, "APIUSER");
             if (!identityResult.Succeeded) return new CreateUserResponse(appUser.Id, false, identityResult.Errors.Select(e => new Error(e.Code, e.Description)));
             
             return new CreateUserResponse(appUser.Id, identityResult.Succeeded, identityResult.Succeeded ? null : identityResult.Errors.Select(e => new Error(e.Code, e.Description)));

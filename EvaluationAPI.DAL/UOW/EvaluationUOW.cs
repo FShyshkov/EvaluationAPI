@@ -17,29 +17,28 @@ namespace EvaluationAPI.DAL.UOW
         readonly EvaluationContext _context;
         readonly EvIdentityContext _identContext;
         readonly UserManager<EvaluationUser> _appUserManager;
-        internal TestRepository tests;
-        internal QuestionRepository questions;
-        internal ResultRepository results;
-        internal UserRepository users;
+        readonly ITestRepository tests;
+        readonly IQuestionRepository questions;
+        readonly IResultRepository results;
+        readonly IUserRepository users;
 
         private bool disposed = false;
 
-        public EvaluationUOW(EvaluationContext context, EvIdentityContext identContext, UserManager<EvaluationUser> appUserManager)
+        public EvaluationUOW(EvaluationContext context, EvIdentityContext identContext, UserManager<EvaluationUser> appUserManager, IUserRepository userRepository, IResultRepository resultRepository, IQuestionRepository questionRepository, ITestRepository testRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _identContext = identContext;
-            _appUserManager = appUserManager;
+            _identContext = identContext ?? throw new ArgumentNullException(nameof(identContext));
+            _appUserManager = appUserManager ?? throw new ArgumentNullException(nameof(appUserManager));
+            users = userRepository ?? throw new ArgumentNullException(nameof(appUserManager));
+            results = resultRepository ?? throw new ArgumentNullException(nameof(appUserManager));
+            questions = questionRepository ?? throw new ArgumentNullException(nameof(appUserManager));
+            tests = testRepository ?? throw new ArgumentNullException(nameof(appUserManager));
         }
 
         public IUserRepository Users
         {
             get
             {
-
-                if (this.users == null)
-                {
-                    this.users = new UserRepository(_appUserManager, _identContext);
-                }
                 return users;
             }
         }
@@ -52,11 +51,6 @@ namespace EvaluationAPI.DAL.UOW
         public virtual ITestRepository Tests {
             get
             {
-
-                if (this.tests == null)
-                {
-                    this.tests = new TestRepository(_context);
-                }
                 return tests;
             }
         }
@@ -65,11 +59,6 @@ namespace EvaluationAPI.DAL.UOW
         {
             get
             {
-
-                if (this.questions == null)
-                {
-                    this.questions = new QuestionRepository(_context);
-                }
                 return questions;
             }
         }
@@ -78,11 +67,6 @@ namespace EvaluationAPI.DAL.UOW
         {
             get
             {
-
-                if (this.results == null)
-                {
-                    this.results = new ResultRepository(_context);
-                }
                 return results;
             }
         }
