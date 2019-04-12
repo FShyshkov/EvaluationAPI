@@ -4,11 +4,11 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using EvaluationAPI.BLL.Contracts;
-using EvaluationAPI.DAL.Identity.IdentityEntity;
 using EvaluationAPI.DAL.Contracts;
 using EvaluationAPI.BLL.Requests;
 using EvaluationAPI.BLL.Responses;
 using EvaluationAPI.DAL.Identity.Responses;
+using EvaluationAPI.DAL.Identity.IdentityEntity;
 
 namespace EvaluationAPI.BLL.Services
 {
@@ -21,7 +21,7 @@ namespace EvaluationAPI.BLL.Services
         public UserService(IUnitOfWork uow, IJwtFactory jwtFactory)
         {
             _evalUOW = uow ?? throw new ArgumentNullException(nameof(uow));
-            _jwtFactory = jwtFactory;
+            _jwtFactory = jwtFactory ?? throw new ArgumentNullException(nameof(uow));
         }
 
         //Register

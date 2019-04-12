@@ -5,6 +5,13 @@ using EvaluationAPI.BLL.Contracts;
 using EvaluationAPI.Presenters;
 using Microsoft.Extensions.Options;
 using EvaluationAPI.Models.Settings;
+using System.Linq;
+using EvaluationAPI.Models.Responses;
+using System.Security.Claims;
+
+
+using EvaluationAPI.BLL.Responses;
+using System.Text;
 
 namespace EvaluationAPI.Controllers
 {
@@ -14,18 +21,23 @@ namespace EvaluationAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IEvaluationService _evaluationService;
         private readonly RegisterUserPresenter _registerUserPresenter;
         private readonly LoginPresenter _loginPresenter;
 
-        public UsersController(IUserService registerUserUseCase, RegisterUserPresenter userPresenter, LoginPresenter loginPresenter, IOptions<AuthSettings> authSettings)
+        public UsersController(IUserService registerUserUseCase, IEvaluationService evaluationService, RegisterUserPresenter userPresenter, LoginPresenter loginPresenter, IOptions<AuthSettings> authSettings)
         {
             _userService = registerUserUseCase;
             _registerUserPresenter = userPresenter;
             _loginPresenter = loginPresenter;
+            _evaluationService = evaluationService;
         }
 
         // POST api/v1.0/users/register
         [HttpPost("register")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult> Post([FromBody] Models.Requests.RegisterUserRequest request)
         {
             if (!ModelState.IsValid)
@@ -44,6 +56,11 @@ namespace EvaluationAPI.Controllers
             await _userService.Handle(new LoginRequest(request.UserName, request.Password, Request.HttpContext.Connection.RemoteIpAddress?.ToString()), _loginPresenter);
             return _loginPresenter.ContentResult;
         }
-
+        [HttpGet("results/{name}")]
+        public async Task<IActionResult> GetResults(string name, int? pageSize = 10, int? pageNumber = 1)
+        {
+            var response = await _evaluationService.GetResultsByUserAsync(name, (int)pageSize, (int)pageNumber);
+            return response.ToHttpResponse();
+        }
     }
 }

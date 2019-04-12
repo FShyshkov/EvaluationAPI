@@ -25,10 +25,15 @@ namespace EvaluationAPI.BLL.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<ISingleResponse<ResultDTO>> AddResultForTestAsync(long testId, string userName, ResultDTO result)
+        public async Task<ISingleResponse<ResultDTO>> AddResultForTestAsync(int testId, string userName, int result)
         {
             var response = new SingleResponse<ResultDTO>();
-            var tempResult = _mapper.MapDTOResult(result);
+            var tempResult = new Result()
+            {
+                TestId = testId,
+                UserName = userName,
+                TestResult = result
+            };
 
             using (var transaction = await _evalUOW.StartTransaction())
             {
@@ -36,7 +41,7 @@ namespace EvaluationAPI.BLL.Services
                 {
                     await _evalUOW.Results.Add(tempResult);
                     await _evalUOW.SaveAsync();
-                    response.Model = result;
+                    response.Model = _mapper.MapResult(tempResult);
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -47,14 +52,14 @@ namespace EvaluationAPI.BLL.Services
             return response;
         }
 
-        public async Task<IPagedResponse<ResultDTO>> GetResultsByTestAsync(long testId, int pageSize, int pageNumber)
+        public async Task<IPagedResponse<ResultDTO>> GetResultsForUserByTestAsync(string userName, int testId, int pageSize=10, int pageNumber=1)
         {
             var response = new PagedResponse<ResultDTO>();
 
             try
             {
                 // Get query
-                IQueryable<Result> query = _evalUOW.Results.GetAll().Where(x => x.TestId == testId);
+                IQueryable<Result> query = _evalUOW.Results.GetAll().Where(x => x.TestId == testId && x.UserName == userName);
 
                 // Set information for paging
                 response.PageSize = pageSize;
@@ -73,13 +78,13 @@ namespace EvaluationAPI.BLL.Services
             }
             catch (Exception ex)
             {
-                response.SetError(nameof(GetResultsByTestAsync), ex);
+                response.SetError(nameof(GetResultsForUserByTestAsync), ex);
             }
 
             return response;
         }
 
-        public async Task<IPagedResponse<ResultDTO>> GetResultsByUserAsync(string userName, int pageSize, int pageNumber)
+        public async Task<IPagedResponse<ResultDTO>> GetResultsByUserAsync(string userName, int pageSize=10, int pageNumber=1)
         {
             var response = new PagedResponse<ResultDTO>();
 
@@ -96,22 +101,27 @@ namespace EvaluationAPI.BLL.Services
                 // Retrieve items, set model for response
                 var resultList = await query.Paging(pageSize, pageNumber).ToListAsync();
                 var resultListDTO = new List<ResultDTO>();
-                foreach (var res in resultList)
+                if(resultList != null)
                 {
-                    resultListDTO.Add(_mapper.MapResult(res));
-                }
-
+                    foreach (var res in resultList)
+                    {
+                        resultListDTO.Add(_mapper.MapResult(res));
+                    }
+                } else
+                {
+                    resultListDTO = null;
+                }              
                 response.Model = resultListDTO;
             }
             catch (Exception ex)
             {
-                response.SetError(nameof(GetResultsByTestAsync), ex);
+                response.SetError(nameof(GetResultsByUserAsync), ex);
             }
 
             return response;
         }
 
-        public async Task<ISingleResponse<TestDTO>> GetTestAsync(long id)
+        public async Task<ISingleResponse<TestDTO>> GetTestAsync(int id)
         {
             var response = new SingleResponse<TestDTO>();
 
@@ -124,7 +134,7 @@ namespace EvaluationAPI.BLL.Services
             }
             catch (Exception ex)
             {
-                response.SetError(nameof(GetResultsByTestAsync), ex);
+                response.SetError(nameof(GetTestAsync), ex);
             }
 
             return response;
@@ -156,7 +166,7 @@ namespace EvaluationAPI.BLL.Services
             }
             catch (Exception ex)
             {
-                response.SetError(nameof(GetResultsByTestAsync), ex);
+                response.SetError(nameof(GetTestsSummaryAsync), ex);
             }
 
             return response;

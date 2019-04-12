@@ -12,12 +12,12 @@ namespace EvaluationAPI.BLL.Contracts
     {
         Task<IPagedResponse<TestDTO>> GetTestsSummaryAsync(int pageSize = 10, int pageNumber = 1);
 
-        Task<ISingleResponse<TestDTO>> GetTestAsync(long id);
+        Task<ISingleResponse<TestDTO>> GetTestAsync(int id);
 
-        Task<IPagedResponse<ResultDTO>> GetResultsByTestAsync(long testId, int pageSize = 10, int pageNumber = 1);
+        Task<IPagedResponse<ResultDTO>> GetResultsForUserByTestAsync(string userName, int testId, int pageSize = 10, int pageNumber = 1);
 
         Task<IPagedResponse<ResultDTO>> GetResultsByUserAsync(string userName, int pageSize = 10, int pageNumber = 1);
 
-        Task<ISingleResponse<ResultDTO>> AddResultForTestAsync(long testId, string userName, ResultDTO result);
+        Task<ISingleResponse<ResultDTO>> AddResultForTestAsync(int testId, string userName, int result);
     }
 }

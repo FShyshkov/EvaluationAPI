@@ -3,7 +3,7 @@ using EvaluationAPI.BLL.Contracts;
 using EvaluationAPI.BLL.Responses;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EvaluationAPI.Responses
+namespace EvaluationAPI.Models.Responses
 {
     public static class Extensions
     {

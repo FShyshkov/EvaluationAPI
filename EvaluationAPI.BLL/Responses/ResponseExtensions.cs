@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using EvaluationAPI.BLL.Contracts;
+using EvaluationAPI.BLL.Exceptions;
 
 namespace EvaluationAPI.BLL.Responses
 {
@@ -9,15 +10,14 @@ namespace EvaluationAPI.BLL.Responses
     {
         public static void SetError(this IResponse response, string actionName, Exception ex)
         {
-            // todo: Save error in log file
 
             response.ErrorOccured = true;
 
-            if (ex is Exception cast)
+            if (ex is EvaluationException cast)
             {
                 response.ErrorMessage = ex.Message;
             }
-            else            {
+            else  {
                
 
                 response.ErrorMessage = "There was an internal error, please contact to technical support.";
