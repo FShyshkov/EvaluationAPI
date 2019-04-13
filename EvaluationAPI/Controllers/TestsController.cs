@@ -66,6 +66,15 @@ namespace EvaluationAPI.Controllers
             var response = await _testEditService.AddTestAsync(testName);
             return response.ToHttpResponse();
         }
+
+        [Authorize(Policy = "TestEditor")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTestAsync(int id, [FromBody] string testName)
+        {
+            var response = await _testEditService.UpdateTestAsync(id, testName);
+            return response.ToHttpResponse();
+        }
+
         [Authorize(Policy = "TestEditor")]
         [HttpPost("{id}/Questions")]
         public async Task<IActionResult> AddQuestionAsync(int id, [FromBody] EvaluationAPI.Models.Requests.AddQuestionRequest request)

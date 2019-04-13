@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using EvaluationAPI.BLL.Contracts;
 using EvaluationAPI.BLL.DTO;
 using EvaluationAPI.DAL.Entities;
+using EvaluationAPI.BLL.Exceptions;
 
 namespace EvaluationAPI.BLL.Common
 {
@@ -13,10 +14,14 @@ namespace EvaluationAPI.BLL.Common
         public QuestionDTO MapQuestion(Question question)
         {
             var tempPAn = question.QuestionText.Split("#-#", StringSplitOptions.RemoveEmptyEntries);
-            if(tempPAn.Length != question.Answer.Length)
+            if (tempPAn.Length < 2)
             {
-                throw new EvaluationAPI.BLL.Exceptions.QuestionMappingException("Correct answer is corrupted");
+                throw new QuestionMappingException("Should be more than one possible answer");
             }
+            if (tempPAn.Length != question.Answer.Length)
+            {
+                throw new QuestionMappingException("Correct answer is corrupted");
+            }           
             var tempCAnString = new StringBuilder(question.Answer);
             List<int> tempCAns = new List<int>();
             for (int i = 0; i < tempCAnString.Length; i++)
@@ -38,23 +43,28 @@ namespace EvaluationAPI.BLL.Common
 
         public Question MapDTOQuestion(QuestionDTO question)
         {
-            int[] tempAnArray = new int[question.PossibleAnswers.Length];
-            foreach(int i in question.Answer)
+            int tempLength = question.PossibleAnswers.Length;
+            if (tempLength < 2)
             {
-                if(i < 1)
+                throw new QuestionMappingException("Should be more than one possible answer");
+            }
+            int[] tempAnArray = new int[tempLength];
+            foreach (int i in question.Answer)
+            {
+                if (i < 1 || tempLength < (i-1))
                 {
-                    throw new EvaluationAPI.BLL.Exceptions.QuestionMappingException("Correct answer id is corrupted");
+                    throw new QuestionMappingException("Correct answer id is corrupted");
                 }
                 tempAnArray[i - 1] = 1; 
             }
             var tempAn = String.Concat(tempAnArray);
-            if (question.PossibleAnswers.Length != tempAn.Length)
+            if (tempLength != tempAn.Length)
             {
-                throw new EvaluationAPI.BLL.Exceptions.QuestionMappingException("Correct answer is corrupted");
+                throw new QuestionMappingException("Correct answer is corrupted");
             }
             if (question.PossibleAnswers.Contains("#-#"))
             {
-                throw new EvaluationAPI.BLL.Exceptions.QuestionMappingException("Possible answers contain illegal character combination #-#");
+                throw new QuestionMappingException("Possible answers contain illegal character combination #-#");
             }
             return new Question()
             {

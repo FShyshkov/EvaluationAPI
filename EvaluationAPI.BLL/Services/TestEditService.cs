@@ -49,16 +49,15 @@ namespace EvaluationAPI.BLL.Services
             var tempTest = new Test()
             {
                 TestName = testName,
-                TestId = -1
             };
 
             using (var transaction = await _evalUOW.StartTransaction())
             {
                 try
                 {
-                    await _evalUOW.Tests.Add(tempTest);
+                    var tempt = await _evalUOW.Tests.Add(tempTest);
                     await _evalUOW.SaveAsync();
-                    response.Model = _mapper.MapTest(tempTest);
+                    response.Model = _mapper.MapTest(tempt);
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -72,21 +71,18 @@ namespace EvaluationAPI.BLL.Services
         public async Task<ISingleResponse<TestDTO>> UpdateTestAsync(int id, string testName)
         {
             var response = new SingleResponse<TestDTO>();
-            Test tTest = null;
-            var tempTests = await _evalUOW.Tests.Get(x => x.TestId == id, null, null);
-            tTest = tempTests.FirstOrDefault();
+            Test test = new Test
+            {
+                TestId = id,
+                TestName = testName
+            };
             using (var transaction = await _evalUOW.StartTransaction())
             {
                 try
-                {
-                    if (tTest == null)
-                    {
-                        throw new InvalidTestIdException("Test with such ID not found");
-                    }
-                    tTest.TestName = testName;
-                    _evalUOW.Tests.Update(tTest);
+                {                                
+                    _evalUOW.Tests.Update(test);
                     await _evalUOW.SaveAsync();
-                    response.Model = _mapper.MapTest(tTest);
+                    response.Model = _mapper.MapTest(test);
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -103,7 +99,6 @@ namespace EvaluationAPI.BLL.Services
             var response = new SingleResponse<QuestionDTO>();
             var tempQuestion = new QuestionDTO()
             {
-                QuestionId = -1,
                 QuestionText = questionText,
                 PossibleAnswers = possibleAnswers,
                 Answer = tempList,
@@ -114,9 +109,9 @@ namespace EvaluationAPI.BLL.Services
             {
                 try
                 {
-                    await _evalUOW.Questions.Add(_mapper.MapDTOQuestion(tempQuestion));
+                    var tempq = await _evalUOW.Questions.Add(_mapper.MapDTOQuestion(tempQuestion));
                     await _evalUOW.SaveAsync();
-                    response.Model = tempQuestion;
+                    response.Model = _mapper.MapQuestion(tempq);
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -127,45 +122,26 @@ namespace EvaluationAPI.BLL.Services
             return response;
         }
 
-        public async Task<ISingleResponse<QuestionDTO>> UpdateQuestionAsync(int id, string QuestionText, string[] PossibleAnswers = null, int[] correctAnswers = null, int? testId = null)
+        public async Task<ISingleResponse<QuestionDTO>> UpdateQuestionAsync(int id, string questionText, string[] PossibleAnswers, int[] correctAnswers, int testId)
         {
             var response = new SingleResponse<QuestionDTO>();
-            Question tQuestion = null;
-            var tempQuestions = await _evalUOW.Questions.Get(x => x.QuestionId == id, null, null);
-            tQuestion = tempQuestions.FirstOrDefault();            
-
+            List<int> tempList = new List<int>(correctAnswers);
+            QuestionDTO questionDTO = new QuestionDTO
+            {
+                QuestionId = id,
+                QuestionText = questionText,
+                TestId = testId,
+                PossibleAnswers = PossibleAnswers,
+                Answer = tempList
+            };
+            Question question = _mapper.MapDTOQuestion(questionDTO);
             using (var transaction = await _evalUOW.StartTransaction())
             {
                 try
                 {
-                    if (tQuestion == null)
-                    {
-                        throw new InvalidQuestionIDException("Question with such ID not found");
-                    }
-                    var tQuestionDTO = _mapper.MapQuestion(tQuestion);
-                    int storeId = tQuestion.QuestionId;
-                    if (!String.IsNullOrEmpty(QuestionText))
-                    {
-                        tQuestionDTO.QuestionText = QuestionText;
-                    }
-                    if(PossibleAnswers != null)
-                    {
-                        tQuestionDTO.PossibleAnswers = PossibleAnswers;
-                    }
-                    if(correctAnswers != null)
-                    {
-                        List<int> tempList = new List<int>(correctAnswers);
-                        tQuestionDTO.Answer = tempList;
-                    }
-                    if(testId != null)
-                    {
-                        tQuestionDTO.TestId = (int)testId;
-                    }
-                    tQuestion = _mapper.MapDTOQuestion(tQuestionDTO);
-                    tQuestion.QuestionId = storeId;
-                    _evalUOW.Questions.Update(tQuestion);
+                    _evalUOW.Questions.Update(question);
                     await _evalUOW.SaveAsync();
-                    response.Model = _mapper.MapQuestion(tQuestion);
+                    response.Model = _mapper.MapQuestion(question);
                     transaction.Commit();
                 }
                 catch (Exception ex)
