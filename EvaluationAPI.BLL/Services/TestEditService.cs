@@ -159,14 +159,14 @@ namespace EvaluationAPI.BLL.Services
             try
             {
                 // Retrieve order by id
-                var entity = await _evalUOW.Questions.Get(x => x.QuestionId == id, null, null);
+                var entity = _evalUOW.Questions.Get(x => x.QuestionId == id, null, null).ToAsyncEnumerable().FirstOrDefault();
 
                 if (entity == null)
                     return response;
 
 
                 // Delete order
-                await _evalUOW.Questions.Remove(id);
+                var question = await _evalUOW.Questions.Remove(id);
                 await _evalUOW.SaveAsync();
             }
             catch (Exception ex)

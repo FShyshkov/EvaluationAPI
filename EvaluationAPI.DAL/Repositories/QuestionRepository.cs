@@ -60,7 +60,7 @@ namespace EvaluationAPI.DAL.Repositories
 
         public async virtual Task<Question> Remove(int id)
         {
-            var entity = await _context.Questions.SingleAsync();
+            var entity = await _context.Questions.FirstOrDefaultAsync(x => x.QuestionId == id);
             _context.Questions.Remove(entity);
             return entity;
         }

@@ -119,7 +119,9 @@ namespace EvaluationAPI
             services.AddIdentityCore<EvaluationUser>();
             identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
             identityBuilder.AddEntityFrameworkStores<EvIdentityContext>().AddDefaultTokenProviders().AddRoleManager<RoleManager<IdentityRole>>();
-           
+
+            services.AddCors();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddApiVersioning();
@@ -167,11 +169,16 @@ namespace EvaluationAPI
                         });
                 });
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseHttpsRedirection();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "EvaluationAPI V1");
             });
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
 
             app.UseSwagger();
             app.UseAuthentication();
