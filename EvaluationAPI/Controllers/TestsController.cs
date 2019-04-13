@@ -83,7 +83,7 @@ namespace EvaluationAPI.Controllers
         }
 
         [Authorize(Policy = "TestEditor")]
-        [HttpDelete("{id}/Questions/{id2}")]
+        [HttpPut("{id}/Questions/{id2}")]
         public async Task<IActionResult> UpdateQuestionInTestWithIdAsync(int id, int id2, [FromBody] EvaluationAPI.Models.Requests.UpdateQuestionRequest request)
         {
             var response = await _testEditService.UpdateQuestionAsync(id2, request.QuestionText, request.PossibleAnswers, request.correctAnswers, id);
