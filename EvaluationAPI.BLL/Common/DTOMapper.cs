@@ -62,10 +62,14 @@ namespace EvaluationAPI.BLL.Common
             {
                 throw new QuestionMappingException("Correct answer is corrupted");
             }
-            if (question.PossibleAnswers.Contains("#-#"))
+            foreach (var answer in question.PossibleAnswers)
             {
-                throw new QuestionMappingException("Possible answers contain illegal character combination #-#");
+                if (answer.Contains("#-#"))
+                {
+                    throw new QuestionMappingException("Possible answers contain illegal character combination #-#");
+                }
             }
+            
             return new Question()
             {
                 QuestionId = question.QuestionId,
