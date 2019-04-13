@@ -7,7 +7,7 @@ namespace EvaluationAPI.Models.Validators
     {
         public LoginRequestValidator()
         {
-            RuleFor(x => x.UserName).NotEmpty();
+            RuleFor(x => x.UserName).NotEmpty().Matches(@"^[a-zA-Z0-9]+$");
             RuleFor(x => x.Password).NotEmpty();
         }
     }

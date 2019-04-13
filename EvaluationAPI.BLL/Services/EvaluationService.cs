@@ -9,6 +9,7 @@ using EvaluationAPI.BLL.Responses;
 using EvaluationAPI.DAL.Contracts;
 using EvaluationAPI.DAL.Entities;
 using EvaluationAPI.DAL.Extensions;
+using EvaluationAPI.BLL.Exceptions;
 
 namespace EvaluationAPI.BLL.Services
 {
@@ -90,6 +91,10 @@ namespace EvaluationAPI.BLL.Services
 
             try
             {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(userName, @"^[a-zA-Z0-9]+$"))
+                {
+                    throw new UserNameException("username should be alphanumeric");
+                }
                 // Get query
                 IQueryable<Result> query = _evalUOW.Results.GetAll().Where(x => x.UserName == userName);
 

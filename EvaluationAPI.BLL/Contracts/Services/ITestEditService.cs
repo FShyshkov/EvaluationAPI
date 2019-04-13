@@ -16,7 +16,9 @@ namespace EvaluationAPI.BLL.Contracts
 
         Task<ISingleResponse<QuestionDTO>> AddQuestionAsync(string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int testId);
 
-        Task<ISingleResponse<QuestionDTO>> UpdateQuestionAsync(int id, string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int testId);
+        Task<ISingleResponse<QuestionDTO>> UpdateQuestionAsync(int id, string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int? testId);
+
+        Task<IResponse> RemoveQuestionAsync(int id);
 
     }
 }

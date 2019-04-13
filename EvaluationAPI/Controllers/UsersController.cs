@@ -30,9 +30,6 @@ namespace EvaluationAPI.Controllers
 
         // POST api/v1.0/users/register
         [HttpPost("register")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
         public async Task<ActionResult> Post([FromBody] Models.Requests.RegisterUserRequest request)
         {
             if (!ModelState.IsValid)
@@ -55,11 +52,7 @@ namespace EvaluationAPI.Controllers
         [Authorize(Policy = "ApiUser")]
         [HttpGet("results/{name}")]
         public async Task<IActionResult> GetResults(string name, int? pageSize = 10, int? pageNumber = 1)
-        {
-            if (!System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-zA-Z0-9]+$"))
-            {
-                return BadRequest("username should be alphanumeric");
-            }
+        {            
             var response = await _evaluationService.GetResultsByUserAsync(name, (int)pageSize, (int)pageNumber);
             return response.ToHttpResponse();
         }

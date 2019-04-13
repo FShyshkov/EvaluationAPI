@@ -1,46 +1,204 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EvaluationAPI.BLL.Contracts;
 using EvaluationAPI.BLL.DTO;
+using EvaluationAPI.BLL.Exceptions;
+using EvaluationAPI.BLL.Responses;
 using EvaluationAPI.DAL.Contracts;
+using EvaluationAPI.DAL.Entities;
 
 namespace EvaluationAPI.BLL.Services
 {
-    class TestEditService : ITestEditService
+    public class TestEditService : ITestEditService
     {
+        private readonly IDTOMapper _mapper;
         private readonly IUnitOfWork _evalUOW;
         private bool disposedValue = false;
 
-        public TestEditService(IUnitOfWork uow)
+        public TestEditService(IUnitOfWork uow, IDTOMapper mapper)
         {
             _evalUOW = uow ?? throw new ArgumentNullException(nameof(uow));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public Task<ISingleResponse<TestDTO>> GetTestAsync(int id)
+        public async Task<ISingleResponse<TestDTO>> GetTestAsync(int id)
         {
-            throw new NotImplementedException();
+            var response = new SingleResponse<TestDTO>();
+
+            try
+            {
+                var test = await _evalUOW.Tests.Get(x => x.TestId == id, null, "Questions");
+                var testDTO = _mapper.MapTest(test.FirstOrDefault());
+
+                response.Model = testDTO;
+            }
+            catch (Exception ex)
+            {
+                response.SetError(nameof(GetTestAsync), ex);
+            }
+
+            return response;
         }
 
-        public Task<ISingleResponse<TestDTO>> AddTestAsync(string testName)
+        public async Task<ISingleResponse<TestDTO>> AddTestAsync(string testName)
         {
-            throw new NotImplementedException();
+            var response = new SingleResponse<TestDTO>();
+            var tempTest = new Test()
+            {
+                TestName = testName,
+                TestId = -1
+            };
+
+            using (var transaction = await _evalUOW.StartTransaction())
+            {
+                try
+                {
+                    await _evalUOW.Tests.Add(tempTest);
+                    await _evalUOW.SaveAsync();
+                    response.Model = _mapper.MapTest(tempTest);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    response.SetError(nameof(AddTestAsync), ex);
+                }
+            }
+            return response;
         }
 
-        public Task<ISingleResponse<TestDTO>> UpdateTestAsync(int id, string testName)
+        public async Task<ISingleResponse<TestDTO>> UpdateTestAsync(int id, string testName)
         {
-            throw new NotImplementedException();
+            var response = new SingleResponse<TestDTO>();
+            Test tTest = null;
+            var tempTests = await _evalUOW.Tests.Get(x => x.TestId == id, null, null);
+            tTest = tempTests.FirstOrDefault();
+            using (var transaction = await _evalUOW.StartTransaction())
+            {
+                try
+                {
+                    if (tTest == null)
+                    {
+                        throw new InvalidTestIdException("Test with such ID not found");
+                    }
+                    tTest.TestName = testName;
+                    _evalUOW.Tests.Update(tTest);
+                    await _evalUOW.SaveAsync();
+                    response.Model = _mapper.MapTest(tTest);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    response.SetError(nameof(AddTestAsync), ex);
+                }
+            }
+            return response;
         }
 
-        public Task<ISingleResponse<QuestionDTO>> AddQuestionAsync(string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int testId)
+        public async Task<ISingleResponse<QuestionDTO>> AddQuestionAsync(string questionText, string[] possibleAnswers, int[] correctAnswers, int testId)
         {
-            throw new NotImplementedException();
+            List<int> tempList = new List<int>(correctAnswers);
+            var response = new SingleResponse<QuestionDTO>();
+            var tempQuestion = new QuestionDTO()
+            {
+                QuestionId = -1,
+                QuestionText = questionText,
+                PossibleAnswers = possibleAnswers,
+                Answer = tempList,
+                TestId = testId
+            };
+
+            using (var transaction = await _evalUOW.StartTransaction())
+            {
+                try
+                {
+                    await _evalUOW.Questions.Add(_mapper.MapDTOQuestion(tempQuestion));
+                    await _evalUOW.SaveAsync();
+                    response.Model = tempQuestion;
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    response.SetError(nameof(AddTestAsync), ex);
+                }
+            }
+            return response;
         }
 
-        public Task<ISingleResponse<QuestionDTO>> UpdateQuestionAsync(int id, string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int testId)
+        public async Task<ISingleResponse<QuestionDTO>> UpdateQuestionAsync(int id, string QuestionText, string[] PossibleAnswers = null, int[] correctAnswers = null, int? testId = null)
         {
-            throw new NotImplementedException();
+            var response = new SingleResponse<QuestionDTO>();
+            Question tQuestion = null;
+            var tempQuestions = await _evalUOW.Questions.Get(x => x.QuestionId == id, null, null);
+            tQuestion = tempQuestions.FirstOrDefault();            
+
+            using (var transaction = await _evalUOW.StartTransaction())
+            {
+                try
+                {
+                    if (tQuestion == null)
+                    {
+                        throw new InvalidQuestionIDException("Question with such ID not found");
+                    }
+                    var tQuestionDTO = _mapper.MapQuestion(tQuestion);
+                    int storeId = tQuestion.QuestionId;
+                    if (!String.IsNullOrEmpty(QuestionText))
+                    {
+                        tQuestionDTO.QuestionText = QuestionText;
+                    }
+                    if(PossibleAnswers != null)
+                    {
+                        tQuestionDTO.PossibleAnswers = PossibleAnswers;
+                    }
+                    if(correctAnswers != null)
+                    {
+                        List<int> tempList = new List<int>(correctAnswers);
+                        tQuestionDTO.Answer = tempList;
+                    }
+                    if(testId != null)
+                    {
+                        tQuestionDTO.TestId = (int)testId;
+                    }
+                    tQuestion = _mapper.MapDTOQuestion(tQuestionDTO);
+                    tQuestion.QuestionId = storeId;
+                    _evalUOW.Questions.Update(tQuestion);
+                    await _evalUOW.SaveAsync();
+                    response.Model = _mapper.MapQuestion(tQuestion);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    response.SetError(nameof(AddTestAsync), ex);
+                }
+            }
+            return response;
+        }
+
+        public async Task<IResponse> RemoveQuestionAsync(int id)
+        {
+            var response = new Response();
+
+            try
+            {
+                // Retrieve order by id
+                var entity = await _evalUOW.Questions.Get(x => x.QuestionId == id, null, null);
+
+                if (entity == null)
+                    return response;
+
+
+                // Delete order
+                await _evalUOW.Questions.Remove(id);
+                await _evalUOW.SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                response.SetError(nameof(RemoveQuestionAsync), ex);
+            }
+
+            return response;
         }
 
         protected virtual void Dispose(bool disposing)

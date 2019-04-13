@@ -10,7 +10,7 @@ namespace EvaluationAPI.BLL.Responses
         public string Message { get; }
 
 
-    public RegisterUserResponse(IEnumerable<string> errors, bool success = false, string message = null)
+        public RegisterUserResponse(IEnumerable<string> errors, bool success = false, string message = null)
         {
             Errors = errors;
             Success = success;
