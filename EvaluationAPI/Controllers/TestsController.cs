@@ -61,17 +61,17 @@ namespace EvaluationAPI.Controllers
         }
         [Authorize(Policy = "TestEditor")]
         [HttpPost]
-        public async Task<IActionResult> AddTestAsync([FromBody] string testName)
+        public async Task<IActionResult> AddTestAsync([FromBody] EvaluationAPI.Models.Requests.TestRequest test)
         {
-            var response = await _testEditService.AddTestAsync(testName);
+            var response = await _testEditService.AddTestAsync(test.UserName);
             return response.ToHttpResponse();
         }
 
         [Authorize(Policy = "TestEditor")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTestAsync(int id, [FromBody] string testName)
+        public async Task<IActionResult> UpdateTestAsync(int id, [FromBody] EvaluationAPI.Models.Requests.TestRequest test)
         {
-            var response = await _testEditService.UpdateTestAsync(id, testName);
+            var response = await _testEditService.UpdateTestAsync(id, test.UserName);
             return response.ToHttpResponse();
         }
 

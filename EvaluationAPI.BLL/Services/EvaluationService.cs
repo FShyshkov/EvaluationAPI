@@ -40,6 +40,10 @@ namespace EvaluationAPI.BLL.Services
             {
                 try
                 {
+                    if (result < 0 || result >100)
+                    {
+                        throw new InvalidResultException("Result cant be less than zero or more than 100");
+                    }
                     await _evalUOW.Results.Add(tempResult);
                     await _evalUOW.SaveAsync();
                     response.Model = _mapper.MapResult(tempResult);
