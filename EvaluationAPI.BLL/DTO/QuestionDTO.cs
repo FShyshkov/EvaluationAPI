@@ -9,7 +9,7 @@ namespace EvaluationAPI.BLL.DTO
         public int QuestionId { get; set; }
         public string QuestionText { get; set; }
         public string[] PossibleAnswers { get; set; }
-        public string Answer { get; set; }
+        public List<int> Answer { get; set; }
         public int TestId { get; set; }
     }
 }

@@ -52,7 +52,7 @@ namespace EvaluationAPI.BLL.Services
             return response;
         }
 
-        public async Task<IPagedResponse<ResultDTO>> GetResultsForUserByTestAsync(string userName, int testId, int pageSize=10, int pageNumber=1)
+        public async Task<IPagedResponse<ResultDTO>> GetResultsForUserByTestAsync(string userName, int testId, int pageSize=5, int pageNumber=1)
         {
             var response = new PagedResponse<ResultDTO>();
 
@@ -84,7 +84,7 @@ namespace EvaluationAPI.BLL.Services
             return response;
         }
 
-        public async Task<IPagedResponse<ResultDTO>> GetResultsByUserAsync(string userName, int pageSize=10, int pageNumber=1)
+        public async Task<IPagedResponse<ResultDTO>> GetResultsByUserAsync(string userName, int pageSize=5, int pageNumber=1)
         {
             var response = new PagedResponse<ResultDTO>();
 
@@ -127,7 +127,7 @@ namespace EvaluationAPI.BLL.Services
 
             try
             {
-                var test = await _evalUOW.Tests.Get(x => x.TestId == id, null, "Questions,Results");
+                var test = await _evalUOW.Tests.Get(x => x.TestId == id, null, "Questions");
                 var testDTO = _mapper.MapTest(test.FirstOrDefault());
 
                 response.Model = testDTO;
@@ -140,7 +140,7 @@ namespace EvaluationAPI.BLL.Services
             return response;
         }
 
-        public async Task<IPagedResponse<TestDTO>> GetTestsSummaryAsync(int pageSize = 10, int pageNumber = 1)
+        public async Task<IPagedResponse<TestDTO>> GetTestsSummaryAsync(int pageSize = 5, int pageNumber = 1)
         {
             var response = new PagedResponse<TestDTO>();
 

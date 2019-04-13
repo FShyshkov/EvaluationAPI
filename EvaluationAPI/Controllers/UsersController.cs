@@ -5,13 +5,8 @@ using EvaluationAPI.BLL.Contracts;
 using EvaluationAPI.Presenters;
 using Microsoft.Extensions.Options;
 using EvaluationAPI.Models.Settings;
-using System.Linq;
 using EvaluationAPI.Models.Responses;
-using System.Security.Claims;
-
-
-using EvaluationAPI.BLL.Responses;
-using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EvaluationAPI.Controllers
 {
@@ -56,9 +51,15 @@ namespace EvaluationAPI.Controllers
             await _userService.Handle(new LoginRequest(request.UserName, request.Password, Request.HttpContext.Connection.RemoteIpAddress?.ToString()), _loginPresenter);
             return _loginPresenter.ContentResult;
         }
+
+        [Authorize(Policy = "ApiUser")]
         [HttpGet("results/{name}")]
         public async Task<IActionResult> GetResults(string name, int? pageSize = 10, int? pageNumber = 1)
         {
+            if (!System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-zA-Z0-9]+$"))
+            {
+                return BadRequest("username should be alphanumeric");
+            }
             var response = await _evaluationService.GetResultsByUserAsync(name, (int)pageSize, (int)pageNumber);
             return response.ToHttpResponse();
         }

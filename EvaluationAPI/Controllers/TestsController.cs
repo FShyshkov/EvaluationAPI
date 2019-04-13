@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EvaluationAPI.BLL.Contracts;
-using EvaluationAPI.BLL.DTO;
-using EvaluationAPI.Mappers;
 using EvaluationAPI.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -65,13 +59,17 @@ namespace EvaluationAPI.Controllers
             return response.ToHttpResponse();
         }
 
-        [HttpPost("{id}/Result/{name}")]
+        [HttpPost("{id}/Results/{name}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetResultsForUserByTestAsync(string name, int id, int? pageSize = 10, int? pageNumber = 1)
+        public async Task<IActionResult> GetResultsForUserByTestAsync(string name, int id, int? pageSize, int? pageNumber)
         {
+            if (!System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-zA-Z0-9]+$"))
+            {
+                return BadRequest("username should be alphanumeric");
+            }
             var response = await _evaluationService.GetResultsForUserByTestAsync(name, id, (int)pageSize, (int)pageNumber);
             return response.ToHttpResponse();
         }

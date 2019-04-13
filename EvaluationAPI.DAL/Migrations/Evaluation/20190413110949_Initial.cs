@@ -31,7 +31,7 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                 {
                     QuestionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(25)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(max)", nullable: false),
                     QuestionText = table.Column<string>(type: "varchar(max)", nullable: false),
                     Answer = table.Column<string>(type: "varchar(25)", nullable: false),
                     TestId = table.Column<int>(nullable: false)
@@ -75,19 +75,13 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                 schema: "TestsDB",
                 table: "Tests",
                 columns: new[] { "TestId", "TestName" },
-                values: new object[] { 1, "Test1" });
+                values: new object[] { 1, "C#Basics" });
 
             migrationBuilder.InsertData(
                 schema: "TestsDB",
                 table: "Tests",
                 columns: new[] { "TestId", "TestName" },
-                values: new object[] { 2, "Test2" });
-
-            migrationBuilder.InsertData(
-                schema: "TestsDB",
-                table: "Tests",
-                columns: new[] { "TestId", "TestName" },
-                values: new object[] { 3, "Test3" });
+                values: new object[] { 2, "C#MChoice" });
 
             migrationBuilder.InsertData(
                 schema: "TestsDB",
@@ -95,11 +89,34 @@ namespace EvaluationAPI.DAL.Migrations.Evaluation
                 columns: new[] { "QuestionId", "Answer", "Name", "QuestionText", "TestId" },
                 values: new object[,]
                 {
-                    { 1, "010", "Question1?", "PossibleAnswer1&CorrectAnswer&PossibleAnswer3", 1 },
-                    { 2, "0010", "Question2?", "PossibleAnswer1 asd&PossibleAnswer 2& CorrectAnswer& Answer4", 1 },
-                    { 3, "0100", "Question3?", "PossibleAnswer21 asd&Correct Answer&Possib4le  234252Answer3& Answer4", 1 },
-                    { 4, "010", "Question4?", "PossibleAnswe4r1 asd&Correct answer&Possible252Answer3", 2 },
-                    { 5, "10100", "Question5?", "CorrectAnswer1&Possinswer 2&CorrectAnswer2& PossibleAnswer4& PossibleAnswer5", 2 }
+                    { 1, "0100", "C# class can inherit multiple ________", "Class#-#Interface#-#Abstract class#-#Static class", 1 },
+                    { 2, "0001", "Which of the followings are value types in C#?", "Int32#-#Double#-#Decimal#-#All of the above", 1 },
+                    { 3, "1000", "Which of the following is a reference type in C#?", "String#-#Long#-#Boolean#-#None of the above", 1 },
+                    { 4, "010", "What is Nullable type??", "It allows assignment of null to reference type.#-#It allows assignment of null to value type.#-#It allows assignment of null to static class.", 1 },
+                    { 5, "010", "Struct is a _____.", "Reference type#-#Value type#-#Class type", 1 },
+                    { 8, "1010", "Which of the following access specifiers in C# allow the members to be inherited?", "public#-#private#-#protected#-#internal", 2 },
+                    { 7, "1110", "Which of the following is true about C# structures?", "Unlike classes, structures cannot inherit other structures or classes.#-#Structure members cannot be specified as abstract, virtual, or protected.#-#A structure can implement one or more interfaces.#-#Structure is a reference type", 2 },
+                    { 6, "10010", "Pick all correct ways to initialize a two-dimensional array", "int[,] k = {{2,-2},{3,-2},{0,4}}#-#int k[,] = new int[2,3]#-#int[][] k = new int[2][]#-#int[,] k = new int[2,3]#-#int k[][] = new int[2][3]", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "TestsDB",
+                table: "Results",
+                columns: new[] { "ResultId", "TestId", "TestResult", "UserName" },
+                values: new object[,]
+                {
+                    { 10, 1, 10, "TestUser" },
+                    { 9, 1, 90, "TestUser" },
+                    { 8, 1, 10, "TestUser" },
+                    { 5, 1, 40, "TestUser" },
+                    { 6, 1, 30, "TestUser" },
+                    { 11, 2, 90, "TestUser" },
+                    { 4, 1, 50, "TestUser" },
+                    { 3, 1, 60, "TestUser" },
+                    { 2, 1, 70, "TestUser" },
+                    { 1, 1, 80, "TestUser" },
+                    { 7, 1, 20, "TestUser" },
+                    { 12, 2, 20, "TestUser" }
                 });
 
             migrationBuilder.CreateIndex(

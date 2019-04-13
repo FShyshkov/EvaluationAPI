@@ -16,7 +16,7 @@ namespace EvaluationAPI.DAL.Context.Configurations
             // Generate property on Add
             builder.Property(p => p.QuestionId).ValueGeneratedOnAdd();
             // Set mapping for columns
-            builder.Property(p => p.Name).HasColumnType("varchar(25)").IsRequired();
+            builder.Property(p => p.Name).HasColumnType("varchar(max)").IsRequired();
             builder.Property(p => p.QuestionText).HasColumnType("varchar(max)").IsRequired();
             builder.Property(p => p.Answer).HasColumnType("varchar(25)").IsRequired();
             //Set foreign key

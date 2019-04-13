@@ -18,22 +18,27 @@ namespace EvaluationAPI.BLL.Services
             _evalUOW = uow ?? throw new ArgumentNullException(nameof(uow));
         }
 
-        public Task<ISingleResponse<QuestionDTO>> AddQuestionAsync(QuestionDTO question)
+        public Task<ISingleResponse<TestDTO>> GetTestAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ISingleResponse<TestDTO>> DeleteTestAsync(long id)
+        public Task<ISingleResponse<TestDTO>> AddTestAsync(string testName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ISingleResponse<TestDTO>> GetTestAsync(long id)
+        public Task<ISingleResponse<TestDTO>> UpdateTestAsync(int id, string testName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ISingleResponse<TestDTO>> UpdateTestAsync(TestDTO test)
+        public Task<ISingleResponse<QuestionDTO>> AddQuestionAsync(string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int testId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ISingleResponse<QuestionDTO>> UpdateQuestionAsync(int id, string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int testId)
         {
             throw new NotImplementedException();
         }
@@ -54,6 +59,6 @@ namespace EvaluationAPI.BLL.Services
         public void Dispose()
         {
             Dispose(true);
-        }
+        }       
     }
 }

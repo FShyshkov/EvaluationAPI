@@ -18,9 +18,7 @@ namespace EvaluationAPI.BLL.Responses
                 response.ErrorMessage = ex.Message;
             }
             else  {
-               
-
-                response.ErrorMessage = "There was an internal error, please contact to technical support.";
+               response.ErrorMessage = "There was an internal error, please contact to technical support.";
             }
         }
     }

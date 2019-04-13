@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EvaluationAPI.DAL.Migrations
 {
     [DbContext(typeof(EvIdentityContext))]
-    [Migration("20190412183557_Initial")]
+    [Migration("20190413110936_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

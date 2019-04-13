@@ -8,12 +8,15 @@ namespace EvaluationAPI.BLL.Contracts
 {
     public interface ITestEditService:IDisposable
     {
-        Task<ISingleResponse<TestDTO>> GetTestAsync(long id);
+        Task<ISingleResponse<TestDTO>> GetTestAsync(int id);
 
-        Task<ISingleResponse<TestDTO>> UpdateTestAsync(TestDTO test);
+        Task<ISingleResponse<TestDTO>> AddTestAsync(string testName);
 
-        Task<ISingleResponse<QuestionDTO>> AddQuestionAsync(QuestionDTO question);
+        Task<ISingleResponse<TestDTO>> UpdateTestAsync(int id, string testName);
 
-        Task<ISingleResponse<TestDTO>> DeleteTestAsync(long id);
+        Task<ISingleResponse<QuestionDTO>> AddQuestionAsync(string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int testId);
+
+        Task<ISingleResponse<QuestionDTO>> UpdateQuestionAsync(int id, string QuestionText, string[] PossibleAnswers, int[] correctAnswers, int testId);
+
     }
 }
