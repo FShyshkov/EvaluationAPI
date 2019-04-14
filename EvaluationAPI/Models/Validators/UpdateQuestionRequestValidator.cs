@@ -1,5 +1,4 @@
-﻿using EvaluationAPI.BLL.Requests;
-using FluentValidation;
+﻿using FluentValidation;
 
 
 namespace EvaluationAPI.Models.Validators
