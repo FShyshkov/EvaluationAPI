@@ -13,7 +13,7 @@ using EvaluationAPI.BLL.Exceptions;
 
 namespace EvaluationAPI.BLL.Services
 {
-    public class EvaluationService : IEvaluationService
+    internal class EvaluationService : IEvaluationService
     {
         private readonly IUnitOfWork _evalUOW;
         private bool disposedValue = false;
@@ -44,7 +44,7 @@ namespace EvaluationAPI.BLL.Services
                     {
                         throw new InvalidResultException("Result cant be less than zero or more than 100");
                     }
-                    await _evalUOW.Results.Add(tempResult);
+                    tempResult = await _evalUOW.Results.Add(tempResult);
                     await _evalUOW.SaveAsync();
                     response.Model = _mapper.MapResult(tempResult);
                     transaction.Commit();
@@ -63,15 +63,12 @@ namespace EvaluationAPI.BLL.Services
 
             try
             {
-                // Get query
                 IQueryable<Result> query = _evalUOW.Results.GetAll().Where(x => x.TestId == testId && x.UserName == userName);
 
-                // Set information for paging
                 response.PageSize = pageSize;
                 response.PageNumber = pageNumber;
                 response.ItemsCount = await query.CountAsync();
 
-                // Retrieve items, set model for response
                 var resultList = await query.Paging(pageSize, pageNumber).ToListAsync();
                 var resultListDTO = new List<ResultDTO>();
                 foreach (var res in resultList)

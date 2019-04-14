@@ -13,7 +13,7 @@ using EvaluationAPI.BLL.Exceptions;
 
 namespace EvaluationAPI.BLL.Services
 {
-    class UserService : IUserService
+    internal class UserService : IUserService
     {
         private readonly IUnitOfWork _evalUOW;
         private readonly IJwtFactory _jwtFactory;

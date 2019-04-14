@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using EvaluationAPI.BLL.Services;
 using EvaluationAPI.BLL.Contracts;
 
-namespace EvaluationAPI.BLL.Services
+namespace EvaluationAPI.BLL.Services.Extensions
 {
     internal sealed class JwtTokenHandler : IJwtTokenHandler
     {
@@ -33,7 +33,7 @@ namespace EvaluationAPI.BLL.Services
 
                 return principal;
             }
-            catch (Exception e)
+            catch
             {                
                 return null;
             }

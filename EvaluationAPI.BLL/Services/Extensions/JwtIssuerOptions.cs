@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 
 
-namespace EvaluationAPI.BLL.Services
+namespace EvaluationAPI.BLL.Services.Extensions
 {
     public class JwtIssuerOptions
     {

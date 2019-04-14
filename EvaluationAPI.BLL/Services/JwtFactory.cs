@@ -1,13 +1,14 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using EvaluationAPI.BLL.DTO;
 using EvaluationAPI.BLL.Contracts;
-using EvaluationAPI.BLL.Services;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Collections.Generic;
+using EvaluationAPI.BLL.Services.Extensions;
+
 
 namespace EvaluationAPI.BLL.Services
 {

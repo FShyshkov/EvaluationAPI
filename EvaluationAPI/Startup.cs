@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -7,23 +9,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using EvaluationAPI.DAL.Identity.IdentityContext;
-using EvaluationAPI.DAL.Identity.IdentityEntity;
-using Swashbuckle.AspNetCore.Swagger;
-using EvaluationAPI.BLL;
-using EvaluationAPI.DAL;
-using EvaluationAPI.BLL.Constants;
-using EvaluationAPI.Models.Settings;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using EvaluationAPI.BLL.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using EvaluationAPI.Presenters;
-using FluentValidation.AspNetCore;
-using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using FluentValidation.AspNetCore;
+using Swashbuckle.AspNetCore.Swagger;
 using EvaluationAPI.Extensions;
+using EvaluationAPI.DAL;
+using EvaluationAPI.DAL.Identity.IdentityContext;
+using EvaluationAPI.DAL.Identity.IdentityEntity;
+using EvaluationAPI.BLL;
+using EvaluationAPI.BLL.Constants;
+using EvaluationAPI.BLL.Services.Extensions;
+using EvaluationAPI.Models.Settings;
+using EvaluationAPI.Presenters;
 
 namespace EvaluationAPI
 {

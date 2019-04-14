@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using EvaluationAPI.BLL.Contracts;
 using EvaluationAPI.BLL.Services;
 using EvaluationAPI.BLL.Common;
+using EvaluationAPI.BLL.Services.Extensions;
 
 namespace EvaluationAPI.BLL
 {

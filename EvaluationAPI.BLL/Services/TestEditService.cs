@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using EvaluationAPI.BLL.Contracts;
 using EvaluationAPI.BLL.DTO;
-using EvaluationAPI.BLL.Exceptions;
 using EvaluationAPI.BLL.Responses;
 using EvaluationAPI.DAL.Contracts;
 using EvaluationAPI.DAL.Entities;
 
 namespace EvaluationAPI.BLL.Services
 {
-    public class TestEditService : ITestEditService
+    internal class TestEditService : ITestEditService
     {
         private readonly IDTOMapper _mapper;
         private readonly IUnitOfWork _evalUOW;
