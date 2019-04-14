@@ -7,6 +7,6 @@ namespace EvaluationAPI.Models.Requests
 {
     public class TestRequest
     {
-        public string UserName { get; set; }
+        public string TestName { get; set; }
     }
 }

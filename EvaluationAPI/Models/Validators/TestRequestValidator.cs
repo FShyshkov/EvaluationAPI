@@ -8,7 +8,7 @@ namespace EvaluationAPI.Models.Validators
     {
         public TestRequestValidator()
         {
-            RuleFor(x => x.UserName).NotEmpty().Length(3, 255);
+            RuleFor(x => x.TestName).NotEmpty().Length(3, 255).Matches(@"^[a-zA-Z0-9]+$"); ;
         }
     }
 }

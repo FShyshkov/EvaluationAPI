@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace EvaluationAPI.Models.Validators
 {
-    public class AddQuestionrRequestValidator : AbstractValidator<EvaluationAPI.Models.Requests.AddQuestionRequest>
+    public class AddQuestionRequestValidator : AbstractValidator<EvaluationAPI.Models.Requests.AddQuestionRequest>
     {
-        public AddQuestionrRequestValidator()
+        public AddQuestionRequestValidator()
         {
             RuleFor(x => x.QuestionText).NotEmpty().MinimumLength(3);
             RuleFor(x => x.PossibleAnswers).NotEmpty();

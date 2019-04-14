@@ -23,14 +23,14 @@ namespace EvaluationAPI.Controllers
             _evaluationService = evaluationService;
             _testEditService = testEditService;
         }
-        
+        //DELETE api/v1.0/questions/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestionAsync(int id)
         {
             var response = await _testEditService.RemoveQuestionAsync(id);
             return response.ToHttpResponse();
         }
-
+         //PUT api/v1.0/questions/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateQuestionAsync(int id, [FromBody] EvaluationAPI.Models.Requests.UpdateQuestionRequest request)
         {

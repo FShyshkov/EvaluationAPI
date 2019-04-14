@@ -23,6 +23,7 @@ namespace EvaluationAPI.Controllers
             _testEditService = testEditService;
         }
 
+        //GET api/v1.0/tests/
         [HttpGet]
         public async Task<IActionResult> GetTestsSummaryAsync(int? pageSize = 10, int? pageNumber = 1)
         {
@@ -32,6 +33,7 @@ namespace EvaluationAPI.Controllers
             // Return as http response
             return response.ToHttpResponse();
         }
+        //GET api/v1.0/tests/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTestAsync(int? id)
         {
@@ -42,6 +44,7 @@ namespace EvaluationAPI.Controllers
             return response.ToHttpResponse();
         }
 
+        //POST api/v1.0/tests/{id}/Results
         [HttpPost("{id}/Result")]
         public async Task<IActionResult> AddResultForTestAsync(int id, [FromBody] Models.Requests.ResultRequest result )
         {
@@ -49,6 +52,7 @@ namespace EvaluationAPI.Controllers
             return response.ToHttpResponse();
         }
 
+        //POST api/v1.0/tests/{id}/Results/{name}
         [HttpPost("{id}/Results/{name}")]
         public async Task<IActionResult> GetResultsForUserByTestAsync(string name, int id, int? pageSize, int? pageNumber)
         {
@@ -59,22 +63,24 @@ namespace EvaluationAPI.Controllers
             var response = await _evaluationService.GetResultsForUserByTestAsync(name, id, (int)pageSize, (int)pageNumber);
             return response.ToHttpResponse();
         }
+        //POST  api/v1.0/tests/
         [Authorize(Policy = "TestEditor")]
         [HttpPost]
         public async Task<IActionResult> AddTestAsync([FromBody] EvaluationAPI.Models.Requests.TestRequest test)
         {
-            var response = await _testEditService.AddTestAsync(test.UserName);
+            var response = await _testEditService.AddTestAsync(test.TestName);
             return response.ToHttpResponse();
         }
-
+        //PUT  api/v1.0/tests/{id}
         [Authorize(Policy = "TestEditor")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTestAsync(int id, [FromBody] EvaluationAPI.Models.Requests.TestRequest test)
         {
-            var response = await _testEditService.UpdateTestAsync(id, test.UserName);
+            var response = await _testEditService.UpdateTestAsync(id, test.TestName);
             return response.ToHttpResponse();
         }
 
+        //POST  api/v1.0/tests/{id}/Questions
         [Authorize(Policy = "TestEditor")]
         [HttpPost("{id}/Questions")]
         public async Task<IActionResult> AddQuestionAsync(int id, [FromBody] EvaluationAPI.Models.Requests.AddQuestionRequest request)
@@ -82,7 +88,7 @@ namespace EvaluationAPI.Controllers
             var response = await _testEditService.AddQuestionAsync(request.QuestionText, request.PossibleAnswers, request.correctAnswers, id);
             return response.ToHttpResponse();
         }
-
+        //PUT  api/v1.0/tests/{id}/Questions
         [Authorize(Policy = "TestEditor")]
         [HttpPut("{id}/Questions")]
         public async Task<IActionResult> UpdateQuestionInTestAsync(int id, [FromBody] EvaluationAPI.Models.Requests.UpdateQuestionRequest request)
@@ -90,7 +96,7 @@ namespace EvaluationAPI.Controllers
             var response = await _testEditService.UpdateQuestionAsync(request.QuestionId, request.QuestionText, request.PossibleAnswers, request.correctAnswers, id);
             return response.ToHttpResponse();
         }
-
+        //PUT  api/v1.0/tests/{id}/Questions/{id2}
         [Authorize(Policy = "TestEditor")]
         [HttpPut("{id}/Questions/{id2}")]
         public async Task<IActionResult> UpdateQuestionInTestWithIdAsync(int id, int id2, [FromBody] EvaluationAPI.Models.Requests.UpdateQuestionRequest request)

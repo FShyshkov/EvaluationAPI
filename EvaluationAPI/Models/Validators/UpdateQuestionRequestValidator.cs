@@ -9,6 +9,9 @@ namespace EvaluationAPI.Models.Validators
         {
             RuleFor(x => x.QuestionId).NotEmpty();
             RuleFor(x => x.TestId).NotEmpty();
+            RuleFor(x => x.PossibleAnswers).NotEmpty();
+            RuleFor(x => x.QuestionText).NotEmpty();
+            RuleFor(x => x.correctAnswers).NotEmpty();
         }
     }
 }

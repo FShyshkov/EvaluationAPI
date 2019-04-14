@@ -36,7 +36,6 @@ namespace EvaluationAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            // TODO: verify model
             await _userService.Handle(new RegisterUserRequest(request.FirstName, request.LastName, request.Email, request.UserName, request.Password), _registerUserPresenter);
             return _registerUserPresenter.ContentResult;
         }
@@ -48,7 +47,7 @@ namespace EvaluationAPI.Controllers
             await _userService.Handle(new LoginRequest(request.UserName, request.Password, Request.HttpContext.Connection.RemoteIpAddress?.ToString()), _loginPresenter);
             return _loginPresenter.ContentResult;
         }
-
+        // GET api/v1.0/users/results/{name}
         [Authorize(Policy = "ApiUser")]
         [HttpGet("results/{name}")]
         public async Task<IActionResult> GetResults(string name, int? pageSize = 10, int? pageNumber = 1)
